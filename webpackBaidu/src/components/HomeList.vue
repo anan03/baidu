@@ -21,15 +21,14 @@
 					url: '/parkinglot',
 				}, {
 					title: '设备导入模版',
-					url: './BaiduMapLocationDevice设备.html',
+					url: './device',
 				}, {
 					title: '基础信息模版',
-					url: './BaiduMapLocationRoad道路.html',
+					url: '/road',
 				}, {
 					title: '系统导出车位模版',
-					url: './BaiduMapLocation导出的泊位.html',
+					url: '/system',
 				}]
-
 			}
 		},
 		methods: {}
