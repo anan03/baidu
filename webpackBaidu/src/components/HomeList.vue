@@ -1,9 +1,12 @@
 <template>
 	<div>
 		<div id="view">
+			<div style="text-align: center;">
+				版本V1.1
+			</div>
 			<ul class="infinite-list" style="overflow:auto">
 				<router-link :to="item.url" v-for="(item,index) in titleList" tag="li" class="infinite-list-item">
-					<a :href="item.url"  class="item">
+					<a :href="item.url" class="item">
 						<el-button v-cloak type="primary">{{item.title}}</el-button>
 					</a>
 				</router-link>
@@ -17,18 +20,20 @@
 		data() {
 			return {
 				titleList: [{
-					title: '泊位导入模版',
-					url: '/parkinglot',
-				}, {
-					title: '设备导入模版',
-					url: './device',
-				}, {
-					title: '基础信息模版',
-					url: '/road',
-				}, {
-					title: '系统导出车位模版',
-					url: '/system',
-				}]
+						title: '泊位导入模版',
+						url: '/parkinglot',
+					}, {
+						title: '设备导入模版',
+						url: './device',
+					}, {
+						title: '基础信息模版',
+						url: '/road',
+					},
+					// {
+					// 	title: '系统导出车位模版',
+					// 	url: '/system',
+					// },
+				]
 			}
 		},
 		methods: {}
