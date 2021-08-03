@@ -34,6 +34,7 @@
 				fullscreenLoading: false,
 				loading: null,
 				currentLocation: '',
+				customPosition: null,
 			}
 		},
 		created() {
@@ -58,6 +59,30 @@
 				var zoomCtrl = new BMapGL.ZoomControl(); // 添加缩放控件
 				map.addControl(zoomCtrl);
 				this.map = map;
+				var that = this;
+				map.addEventListener('click', function(e) {
+					if (e.overlay) {
+						return; // 存在覆盖物退出
+					}
+					if(that.customPosition!==null){
+						this.removeOverlay(that.customPosition);
+					}
+					let point = new BMapGL.Point(e.latlng.lng, e.latlng.lat);
+					let marker = new BMapGL.Marker(point); // 创建标注
+					marker.setTitle('纠偏坐标');
+					this.addOverlay(marker); // 将标注添加到地图中
+					marker.addEventListener("click", function() {
+						let opts = {
+							title: this.getTitle()
+						};
+						let info = this.getPosition().lng + ',' + this.getPosition().lat;
+						that.currentLocation = info;
+						let infoWindow = new BMapGL.InfoWindow(info, opts);
+						infoWindow.enableAutoPan();
+						that.map.openInfoWindow(infoWindow, point);
+					});
+					that.customPosition = marker;
+				});
 			},
 			itemOnclick(position) {
 				// this.startLoading();

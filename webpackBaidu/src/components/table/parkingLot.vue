@@ -4,7 +4,7 @@
 			<div class="header-title">
 				<input type="file" id="excel-file" @change="selectFile">
 				<p v-cloak @click="showAll" style="margin: 5px;" :class="[CurrentAll?'selectBg':'defaultBg']">显示所有路段</p>
-				<p v-cloak style="margin: 0px;font-size: 12px;text-align: center;">{{currentLocation}}</p>
+				<p v-cloak style="margin: 0px;font-size: 10px;text-align: center;">{{currentLocation}}</p>
 			</div>
 			<ul class="infinite-list list" v-infinite-scroll="load">
 				<li v-for="(item,index) in roadSections" @click="itemOnclick(index)" :key='item.name'
@@ -34,6 +34,7 @@
 				fullscreenLoading: false,
 				loading: null,
 				currentLocation: '',
+				customPosition: null,
 			}
 		},
 		created() {
@@ -61,6 +62,30 @@
 				var zoomCtrl = new BMapGL.ZoomControl(); // 添加缩放控件
 				map.addControl(zoomCtrl);
 				this.map = map;
+				var that = this;
+				map.addEventListener('click', function(e) {
+					if (e.overlay) {
+						return; // 存在覆盖物退出
+					}
+					if(that.customPosition!==null){
+						this.removeOverlay(that.customPosition);
+					}
+					let point = new BMapGL.Point(e.latlng.lng, e.latlng.lat);
+					let marker = new BMapGL.Marker(point); // 创建标注
+					marker.setTitle('纠偏坐标地址');
+					this.addOverlay(marker); // 将标注添加到地图中
+					marker.addEventListener("click", function() {
+						let opts = {
+							title: this.getTitle()
+						};
+						let info = this.getPosition().lng + ',' + this.getPosition().lat;
+						that.currentLocation = info;
+						let infoWindow = new BMapGL.InfoWindow(info, opts);
+						infoWindow.enableAutoPan();
+						that.map.openInfoWindow(infoWindow, point);
+					});
+					that.customPosition = marker;
+				});
 			},
 			itemOnclick(position) {
 				// this.startLoading();
@@ -98,7 +123,7 @@
 							this.roadSections[i].isShow = true;
 						}
 					}, 100);
-		
+
 				}
 			},
 			addAddress(excelData) {
@@ -110,9 +135,9 @@
 					let point = new BMapGL.Point(excelData[i].坐标经度, excelData[i].坐标纬度);
 					pointArr.push(point);
 					let marker = new BMapGL.Marker(point); // 创建标注
-		
+
 					this.map.addOverlay(marker); // 将标注添加到地图中
-					marker.setTitle(excelData[i].外部编号+":"+excelData[i].路段)
+					marker.setTitle(excelData[i].外部编号 + ":" + excelData[i].路段)
 					marker.addEventListener("click", function() {
 						let opts = {
 							title: this.getTitle()
@@ -123,7 +148,7 @@
 						infoWindow.enableAutoPan();
 						that.map.openInfoWindow(infoWindow, point);
 					});
-		
+
 				}
 				var v = this.map.getViewport(pointArr); //此类代表视野，不可实例化，通过对象字面量形式表示
 				this.map.centerAndZoom(v.center, v.zoom); //设置地图中心点和视野级别
@@ -142,7 +167,7 @@
 						hash.push(arr[i]);
 					}
 				}
-		
+
 				for (let i = 0; i < hash.length; i++) {
 					var currentCount = 0;
 					for (let j = 0; j < excelData.length; j++) {
@@ -173,7 +198,7 @@
 						// console.log('文件类型不正确');
 						return;
 					}
-		
+
 					that.roadSections = [];
 					that.excelData = null;
 					that.CurrentAll = true;
@@ -195,16 +220,16 @@
 						// console.log(persons);
 						//与data绑定数据
 						that.excelData = persons;
-		
+
 						//获取路段去重复展示
 						that.getRoadSections(persons);
-		
+
 						//所有路段位置
 						that.addAddress(persons);
-		
+
 					}, 100);
-		
-		
+
+
 				};
 				// 以二进制方式打开文件
 				fileReader.readAsBinaryString(files[0]);
@@ -240,13 +265,13 @@
 	[v-cloak] {
 		display: none;
 	}
-	
+
 	#view {
 		display: flex;
 		flex-direction: row;
 		height: 100%;
 	}
-	
+
 	.header {
 		padding: 10px;
 		width: 20%;
@@ -255,19 +280,20 @@
 		/* display: flex; */
 		/* flex-direction: column; */
 	}
+
 	/*  container{
 		height: 800px;
 	} */
-	
+
 	.map {
 		height: 100%;
 		width: 80%;
 	}
-	
+
 	.red {
 		background-color: red;
 	}
-	
+
 	.list {
 		overflow: auto;
 		list-style: none;
@@ -276,11 +302,11 @@
 		height: -moz-calc(100% - 120px);
 		height: calc(100% - 120px);
 	}
-	
+
 	.header-title {
 		height: 80px;
 	}
-	
+
 	.defaultBg {
 		border: 1px solid #1E90FF;
 		text-align: center;
@@ -291,7 +317,7 @@
 		font-size: 14px;
 		cursor: pointer;
 	}
-	
+
 	.selectBg {
 		color: white;
 		background-color: #1E90FF;
