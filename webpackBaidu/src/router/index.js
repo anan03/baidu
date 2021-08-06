@@ -5,6 +5,7 @@ import parkingLot from '../components/table/parkingLot.vue'
 import deviceLoaction from '../components/table/deviceLoaction.vue'
 import roadLocation from '../components/table/roadLocation.vue'
 import systemLocation from '../components/table/systemLocation.vue'
+import BjjtList from '../components/bjjt/BjjtList.vue'
 
 
 
@@ -17,6 +18,7 @@ const routes = [
   { path: '/device', component: deviceLoaction },//车位导入模版
   { path: '/road', component: roadLocation },//车位导入模版
   { path: '/system', component: systemLocation },//系统导出的模版
+  { path: '/bjjt/bjjtlist', component: BjjtList },//北京交通模块
 ]
 
 const router = new VueRouter({
