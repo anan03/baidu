@@ -7,8 +7,6 @@ import roadLocation from '../components/table/roadLocation.vue'
 import systemLocation from '../components/table/systemLocation.vue'
 import BjjtList from '../components/bjjt/BjjtList.vue'
 
-
-
 Vue.use(VueRouter)
 
 const routes = [  
