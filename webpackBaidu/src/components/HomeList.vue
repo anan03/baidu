@@ -4,7 +4,8 @@
             <div style="text-align: center;">版本V1.2</div>
             <el-button v-show="false" class="sieze" v-cloak type="primary" @click="outLogin">退出到登录页面</el-button>
             <ul class="infinite-list" style="overflow:auto">
-                <router-link :to="item.url" v-for="(item, index) in titleList" tag="li" class="infinite-list-item">
+                <router-link :to="item.url" v-for="(item) in titleList" tag="li" :key="item.title"
+                    class="infinite-list-item">
                     <a :href="item.url" class="item">
                         <el-button v-cloak type="primary">{{ item.title }}</el-button>
                     </a>
@@ -120,6 +121,7 @@ a.item {
     display: inline-block;
     margin: 20px;
 }
+
 .sieze {
     font-size: 70px;
     margin: 20px;
